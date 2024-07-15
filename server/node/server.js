@@ -56,13 +56,52 @@ app.post("/create-checkout-session", async (req, res) => {
   // [automatic_tax] - to automatically calculate sales tax, VAT and GST in the checkout page
   // For full details see https://stripe.com/docs/api/checkout/sessions/create
   try {
+    const sessionCard = await stripe.checkout.sessions.create({
+      mode: "setup",
+      customer: "cus_QNKDmIsj04mj57",
+      payment_method_types: ["card"],
+      locale: "auto",
+      // locale: "en",
+      // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
+      success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${domainURL}/canceled.html`,
+    });
+    return res.redirect(303, sessionCard.url);
+
+
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
+      // tom03
+      // customer: "cus_QH0Zl1MLS2zkg1",
+      // tom04
+      // customer: "cus_QHImtoXVGrjsqF",
+      // tom05
+      customer: "cus_QNKDmIsj04mj57",
+
+      // subscription_data: {
+      //   trial_period_days: 2,
+      //   description: 'subscription description 002'
+      // },
+
+      payment_method_types: ["card"],
+      // currency: "usd",
+      currency: "eur",
+      // currency: "aed",
+      // discounts: ["coupon"=> "couponCodes001"],
+      // locale: "auto",
+      locale: "en",
+      // allow_promotion_codes: true,
+      // discounts: [{promotion_code: "promo_1PQTGM04MaGWttCHcdfIBu1j"}],
+      // shipping_address_collection: {
+      //   allowed_countries: ["AC", "AD", ]
+      // },
+      // payment_behavior: "default_incomplete",
+      // subscription_data: {billing_cycle_anchor: 1718175816},
       line_items: [
         {
           price: priceId,
           quantity: 1,
-        },
+        }
       ],
       // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
       success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
