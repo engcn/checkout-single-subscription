@@ -56,17 +56,17 @@ app.post("/create-checkout-session", async (req, res) => {
   // [automatic_tax] - to automatically calculate sales tax, VAT and GST in the checkout page
   // For full details see https://stripe.com/docs/api/checkout/sessions/create
   try {
-    const sessionCard = await stripe.checkout.sessions.create({
-      mode: "setup",
-      customer: "cus_QNKDmIsj04mj57",
-      payment_method_types: ["card"],
-      locale: "auto",
-      // locale: "en",
-      // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
-      success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${domainURL}/canceled.html`,
-    });
-    return res.redirect(303, sessionCard.url);
+    // const sessionCard = await stripe.checkout.sessions.create({
+    //   mode: "setup",
+    //   customer: "cus_QNKDmIsj04mj57",
+    //   payment_method_types: ["card"],
+    //   locale: "auto",
+    //   // locale: "en",
+    //   // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
+    //   success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+    //   cancel_url: `${domainURL}/canceled.html`,
+    // });
+    // return res.redirect(303, sessionCard.url);
 
 
     const session = await stripe.checkout.sessions.create({
@@ -76,7 +76,7 @@ app.post("/create-checkout-session", async (req, res) => {
       // tom04
       // customer: "cus_QHImtoXVGrjsqF",
       // tom05
-      customer: "cus_QNKDmIsj04mj57",
+      customer: "cus_QNLftQNyBeWLmd",
 
       // subscription_data: {
       //   trial_period_days: 2,
@@ -84,14 +84,21 @@ app.post("/create-checkout-session", async (req, res) => {
       // },
 
       payment_method_types: ["card"],
-      // currency: "usd",
-      currency: "eur",
-      // currency: "aed",
-      // discounts: ["coupon"=> "couponCodes001"],
+      currency: "usd",
+      // currency: "eur",
       // locale: "auto",
       locale: "en",
-      // allow_promotion_codes: true,
-      // discounts: [{promotion_code: "promo_1PQTGM04MaGWttCHcdfIBu1j"}],
+      // discounts: ["coupon" => "couponCodes001"],
+      allow_promotion_codes: true,
+      // discounts: [
+      //   {
+      //     promotion_code: "promo_1PQTGM04MaGWttCHI6qqLPWM",
+      //     // coupon: "WGMOdp8j"
+      //   }
+      //   // {
+      //   //   promotion_code: "promo_1PQTGM04MaGWttCHcdfIBu1j"
+      //   // }
+      // ],
       // shipping_address_collection: {
       //   allowed_countries: ["AC", "AD", ]
       // },
@@ -103,6 +110,17 @@ app.post("/create-checkout-session", async (req, res) => {
           quantity: 1,
         }
       ],
+      // checkout metadata
+      metadata: {
+        userId: 618,
+        artistId: "761926482-checkout",
+      },
+      subscription_data: {
+        metadata: {
+          userId: 618,
+          artistId: "761926482",
+        },
+      },
       // ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
       success_url: `${domainURL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${domainURL}/canceled.html`,
